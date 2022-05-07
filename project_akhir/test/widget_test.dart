@@ -7,7 +7,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
+import 'package:loginregisterlocaldata/main.dart';
 import 'package:loginregisterlocaldata/xmain.dart';
 
 void main() {
