@@ -1,4 +1,3 @@
-import 'dart:html';
 import 'package:flutter/material.dart';
 import 'pokemon_data_source.dart';
 import 'model/detail_pokemon_model.dart';
@@ -60,31 +59,6 @@ class _DetailPokemonState extends State<DetailPokemon> {
     return Center(
       child: CircularProgressIndicator(),
     );
-  }
-
-  Widget _buildAbilitiesSection(DetailPokemonModel data) {
-    return ListView.builder(
-      itemCount: data.abilities?.length,
-      itemBuilder: (BuildContext context, int index) {
-        return InkWell(
-          // child: _buildItemPokemonList("${data.abilities?[index].ability?.name}"),
-          child: Column(
-            children: [
-              // Image.network(
-              //   "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${data.id}.png",
-              //   height: 300,
-              // ),
-              _buildItemPokemonList("${data.abilities?[index].ability?.name}"),
-            ],
-          ),
-        );
-      },
-    );
-    // return Column(
-    //   children: [
-    //     Text("${data.}"),
-    //   ],
-    // );
   }
 
   Widget _buildSuccessSection(DetailPokemonModel data) {
@@ -193,22 +167,6 @@ class _DetailPokemonState extends State<DetailPokemon> {
             ),
           )
         ],
-      ),
-    );
-  }
-
-  Widget _buildItemPokemonList(String ability) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Column(
-          children: [
-            Text(
-              '${ability}',
-              style: TextStyle(fontSize: 20),
-            ),
-          ],
-        ),
       ),
     );
   }
