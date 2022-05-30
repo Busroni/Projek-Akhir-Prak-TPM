@@ -7,16 +7,35 @@ import 'pokemon_data_source.dart';
 import 'detail_pokemon.dart';
 
 class PageListPokemon extends StatefulWidget {
-  const PageListPokemon({Key? key}) : super(key: key);
+  final bool isLogin;
+
+  const PageListPokemon({Key? key, required this.isLogin}) : super(key: key);
 
   @override
   _PageListPokemonState createState() => _PageListPokemonState();
 }
 
 class _PageListPokemonState extends State<PageListPokemon> {
+
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
+      // appBar: AppBar(
+      //   title: Text("List Pokemon"),
+      //   actions: [
+      //     IconButton(
+      //       icon: Icon(Icons.favorite),
+      //       color: _pressed ? Colors.red : Colors.white,
+      //       padding: EdgeInsets.only(right: 20),
+      //       onPressed: () {
+      //         setState(() {
+      //           _pressed = !_pressed;
+      //         });
+      //       },
+      //     )
+      //   ],
+      // ),
       body: _buildListPokemonBody(),
     );
   }
@@ -50,7 +69,7 @@ class _PageListPokemonState extends State<PageListPokemon> {
 
   Widget _buildEmptySection() {
     return Text("Empty");
-  }
+  }//
 
   Widget _buildLoadingSection() {
     return Center(
@@ -60,22 +79,41 @@ class _PageListPokemonState extends State<PageListPokemon> {
 
   Widget _buildSuccessSection(PokemonListModel data) {
 
+    // TextEditingController _textController = TextEditingController();
+    // onItemChanged(String value) {
+    //   setState(() {
+    //     _buildViewPokemonList(value);
+    //     InkWell(
+    //       onTap: (){
+    //         Navigator.push(context, MaterialPageRoute(builder: (context) {
+    //           return DetailPokemon(
+    //             pokemonName: value,
+    //           );
+    //         }));
+    //       },
+    //       //child: _buildItemPokemonList("${data.results?[index].name}"),
+    //       child: _buildViewPokemonList(value),
+    //     );
+    //   });
+    // }
+
     return SafeArea(
       child: Column(
         children: [
-          Padding(padding: EdgeInsets.symmetric(vertical: 10)),
-          Text("Pokemon",
-            style: TextStyle(fontSize: 30,
-              fontWeight: FontWeight.bold,
-            color: Colors.blue,letterSpacing: 10),
-          ),
+          // Padding(padding: EdgeInsets.symmetric(vertical: 5)),
+          // Text("Pokemon",
+          //   style: TextStyle(fontSize: 30,
+          //     fontWeight: FontWeight.bold,
+          //   color: Colors.blue,letterSpacing: 10),
+          // ),
+
           Container(
             padding: EdgeInsets.only(top: 20),
-            height: 650,
+            height: 780,
             child: GridView.builder(
               gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
               maxCrossAxisExtent: 300,
-              childAspectRatio: 2 / 2,
+              childAspectRatio: 2 / 2.3,
               crossAxisSpacing: 10,
               mainAxisSpacing: 10),
               itemCount: data.results?.length,
@@ -84,7 +122,7 @@ class _PageListPokemonState extends State<PageListPokemon> {
                   onTap: (){
                     Navigator.push(context, MaterialPageRoute(builder: (context) {
                       return DetailPokemon(
-                        pokemonName: "${data.results?[index].name}",
+                        pokemonName: "${data.results?[index].name}", isLogin: widget.isLogin,
                       );
                     }));
                   },
@@ -126,6 +164,7 @@ class _PageListPokemonState extends State<PageListPokemon> {
   }
 
   Widget _buildViewImagePokemonList(DetailPokemonModel detail){
+
     return SafeArea(
         child: Card(
             elevation: 5.0,
@@ -141,8 +180,8 @@ class _PageListPokemonState extends State<PageListPokemon> {
                   children: [
                     Image.network(
                     "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${detail.id}.png",
-                      width: 200,
-                      height: 200,
+                      width: 180,
+                      height: 180,
                       fit: BoxFit.fill,
                     ),
                     Text("${detail.name}", style: TextStyle(

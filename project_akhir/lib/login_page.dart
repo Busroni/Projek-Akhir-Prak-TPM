@@ -51,79 +51,116 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: BackButton(
+          onPressed:(){
+            Navigator.pop(context);
+          }
+        ),
         title: const Text("Login Page"),
       ),
       body: Form(
         key: _formKey,
-        child: Column(
-          children: [
-            _buildFieldUsername(),
-            _buildFieldPassword(),
-            _buildButtonLogin(),
-            _buildButtonRegister(),
-          ],
+          child: Padding(
+            padding: const EdgeInsets.all(50),
+            child: Column(
+              children: [
+                _buildProfileImage(),
+                _buildFieldUsername(),
+                _buildFieldPassword(),
+
+                Padding(
+                  padding: const EdgeInsets.only(top: 30,left: 50, right: 50),
+                  child: Column(
+                    children: [
+                      _buildButtonLogin(),
+                      _buildButtonRegister(),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+    );
+  }
+
+  Widget _buildProfileImage() {
+    return Padding(
+        padding: EdgeInsets.symmetric(vertical: 30),
+      child: Center(
+        child: Image.network(
+          "https://archive.org/services/img/PokemonIcon",
+          height: 250,
         ),
       ),
     );
   }
-
+  
   Widget _buildFieldUsername() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+      padding: const EdgeInsets.symmetric(horizontal: 25),
       child: TextFormField(
-        controller: _usernameController,
-        decoration: const InputDecoration(
-          hintText: "Username",
-        ),
-        validator: (text) {
-          if (text == null || text.isEmpty) {
-            return 'Username Can\'t be empty';
-          } else {
-            return null;
-          }
-        },
-        onChanged: (text) => setState(() => username = text),
+          controller: _usernameController,
+          decoration: const InputDecoration(
+            hintText: "Username",
+              contentPadding: const EdgeInsets.symmetric(horizontal: 25.0)
+          ),
+          validator: (text) {
+            if (text == null || text.isEmpty) {
+              return 'Username Can\'t be empty';
+            } else {
+              return null;
+            }
+          },
+          onChanged: (text) => setState(() => username = text),
       ),
     );
   }
 
   Widget _buildFieldPassword() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+      padding: const EdgeInsets.symmetric(horizontal: 25),
       child: TextFormField(
-        obscureText: true,
-        controller: _passwordController,
-        decoration: const InputDecoration(
-          hintText: "Password",
-        ),
-        validator: (text) {
-          if (text == null || text.isEmpty) {
-            return 'Password Can\'t be empty';
-          } else {
-            return null;
-          }
-        },
-        onChanged: (text) => setState(() => password = text),
-      ),
+            obscureText: true,
+            controller: _passwordController,
+            decoration: const InputDecoration(
+              hintText: "Password",
+                contentPadding: const EdgeInsets.symmetric(horizontal: 25.0)
+            ),
+            validator: (text) {
+              if (text == null || text.isEmpty) {
+                return 'Password Can\'t be empty';
+              } else {
+                return null;
+              }
+            },
+            onChanged: (text) => setState(() => password = text),
+          ),
     );
   }
 
   Widget _buildButtonLogin() {
-    return CommonSubmitButton(
-        labelButton: "Login",
-        submitCallback: (value) {
-          _submit();
-        });
+    return Container(
+        height: 65,
+          child: CommonSubmitButton(
+              labelButton: "Login",
+              submitCallback: (value) {
+                _submit();
+              }),
+    );
   }
 
   Widget _buildButtonRegister() {
-    return CommonSubmitButton(
-        labelButton: "Register",
-        submitCallback: (value) {
-          Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => RegisterPage()),
-          );
-        });
+    return Container(
+      height: 65,
+        child: CommonSubmitButton(
+            labelButton: "Register",
+            submitCallback: (value) {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => RegisterPage()),
+              );
+            }),
+    );
   }
 
   void _prosesLogin(String username, String password) async {

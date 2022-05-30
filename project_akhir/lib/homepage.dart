@@ -15,27 +15,26 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final Future<SharedPreferences> _myPref = SharedPreferences.getInstance();
-
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
-        title: Text("${widget.username}"),
+        title: Text("Pokemon"),
         actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            child: Text(widget.isLogin == true ? widget.username : "Login"),
+          ),
           IconButton(
             onPressed: () {
-              bool status = false;
-              _prosesLogout(status, widget.username);
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
-                return LoginPage(status: status);
-              }));
-
+              widget.isLogin == true ? _logout() : _login();
             },
-            icon: Icon(Icons.logout),
+            icon: Icon(widget.isLogin == true ? Icons.logout : Icons.login),
           )
         ],
       ),
-      body: PageListPokemon(),
+      body: PageListPokemon(isLogin: widget.isLogin),
     );
   }
 
@@ -43,6 +42,20 @@ class _HomePageState extends State<HomePage> {
     SharedPreferences getPref = await _myPref;
     await getPref.setBool("LoginStatus", status);
     await getPref.setString("Username", username);
+  }
+
+  void _login() {
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return LoginPage(status: false);
+    }));
+  }
+
+  void _logout() {
+    bool status = false;
+    _prosesLogout(status, widget.username);
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return HomePage(username: "0", isLogin: status);
+    }));
   }
 
 }

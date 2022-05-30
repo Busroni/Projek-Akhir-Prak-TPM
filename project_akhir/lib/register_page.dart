@@ -18,9 +18,11 @@ class _RegisterPageState extends State<RegisterPage> {
 
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _password2Controller = TextEditingController();
 
   String username = "";
   String password = "";
+  String password2 = "";
 
   void _submit() {
     // validate all the form fields
@@ -49,25 +51,48 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
       body: Form(
         key: _formKey,
-        child: Column(
-          children: [
-            _buildFieldUsername(),
-            _buildFieldPassword(),
-            _buildButtonRegister(),
-          ],
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 30,left: 50, right: 50),
+            child: Column(
+              children: [
+                _buildProfileImage(),
+                _buildFieldUsername(),
+                _buildFieldPassword(),
+                _buildFieldConftirmPassword(),
+                Padding(
+                  padding: const EdgeInsets.only(top: 30,left: 50, right: 50),
+                  child: _buildButtonRegister(),
+                ),
+              ],
+            ),
+          ),
         ),
 
       ),
     );
   }
 
+  Widget _buildProfileImage() {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 30),
+      child: Center(
+        child: Image.network(
+          "https://archive.org/services/img/PokemonIcon",
+          height: 250,
+        ),
+      ),
+    );
+  }
+
   Widget _buildFieldUsername(){
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+      padding: const EdgeInsets.symmetric(horizontal: 25),
       child: TextFormField(
         controller: _usernameController,
-        decoration:  const InputDecoration(
-          hintText: "Username",
+        decoration: const InputDecoration(
+            hintText: "Username",
+            contentPadding: const EdgeInsets.symmetric(horizontal: 25.0)
         ),
         validator: (text) {
           if (text == null || text.isEmpty) {
@@ -83,12 +108,13 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget _buildFieldPassword(){
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+      padding: const EdgeInsets.symmetric(horizontal: 25),
       child: TextFormField(
         obscureText: true,
         controller: _passwordController,
-        decoration:  const InputDecoration(
-          hintText: "Password",
+        decoration: const InputDecoration(
+            hintText: "Password",
+            contentPadding: const EdgeInsets.symmetric(horizontal: 25.0),
         ),
         validator: (text) {
           if (text == null || text.isEmpty) {
@@ -106,11 +132,43 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
+  Widget _buildFieldConftirmPassword(){
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 25),
+      child: TextFormField(
+        obscureText: true,
+        controller: _password2Controller,
+        decoration: const InputDecoration(
+          hintText: "Konfirmasi Password",
+          contentPadding: const EdgeInsets.symmetric(horizontal: 25.0),
+        ),
+        validator: (text) {
+          if (text == null || text.isEmpty) {
+            return 'Confirmation Password Can\'t be empty';
+          }
+          if (text.length<8) {
+            return 'Your Password is <8 Character';
+          }
+          if (text != password) {
+            return 'Your Password is Wrong';
+          }
+          else {
+            return null;
+          }
+        },
+        onChanged: (text) => setState(() => password2 = text),
+      ),
+    );
+  }
+
   Widget _buildButtonRegister(){
-    return CommonSubmitButton(
-        labelButton: "Register",
-        submitCallback: (value){
-          _submit();
-        });
+    return Container(
+        height: 65,
+        child: CommonSubmitButton(
+            labelButton: "Register",
+            submitCallback: (value){
+              _submit();
+            }),
+    );
   }
 }

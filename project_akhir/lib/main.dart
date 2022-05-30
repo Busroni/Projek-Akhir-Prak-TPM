@@ -12,11 +12,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: '123190142 & 123190142',
+      title: '123190147',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: PageListPokemon(),
+      home: PageListPokemon(isLogin: false),
     );
   }
 }
