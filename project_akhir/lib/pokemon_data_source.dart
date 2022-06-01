@@ -10,4 +10,12 @@ class PokemonDataSource {
   Future<Map<String, dynamic>> loadPokemonDetail(pokemonName) {
     return BaseNetwork.get("pokemon/${pokemonName}");
   }
+
+  Future<Map<String, dynamic>> loadPokemonColor() {
+    return BaseNetwork.get("pokemon-color");
+  }
+
+  Future<Map<String, dynamic>> loadPokemonColorSpecies(pokemonName) {
+    return BaseNetwork.get("pokemon-color/${pokemonName}");
+  }
 }

@@ -1,7 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:loginregisterlocaldata/page_color_list.dart';
 import 'model/detail_pokemon_model.dart';
+import 'model/pokemon_color_model.dart';
 import 'model/pokemon_list_model.dart';
 import 'pokemon_data_source.dart';
 import 'detail_pokemon.dart';
@@ -21,26 +23,19 @@ class _PageListPokemonState extends State<PageListPokemon> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text("List Pokemon"),
-      //   actions: [
-      //     IconButton(
-      //       icon: Icon(Icons.favorite),
-      //       color: _pressed ? Colors.red : Colors.white,
-      //       padding: EdgeInsets.only(right: 20),
-      //       onPressed: () {
-      //         setState(() {
-      //           _pressed = !_pressed;
-      //         });
-      //       },
-      //     )
-      //   ],
-      // ),
-      body: _buildListPokemonBody(),
+      body: Container(
+        child: Column(
+          children: [
+            _buildListPokemonColor(),
+            _buildListPokemonBody()
+          ],
+        ),
+      ),
     );
   }
 
   Widget _buildListPokemonBody() {
+    _buildListPokemonColor();
     return Container(
       child: FutureBuilder(
         future: PokemonDataSource.instance.loadPokemonList(),
@@ -55,7 +50,28 @@ class _PageListPokemonState extends State<PageListPokemon> {
             PokemonListModel pokemonListModel =
             PokemonListModel.fromJson(snapshot.data);
             return _buildSuccessSection(pokemonListModel);
-            // return _buildPokemonData(pokemonListModel);
+          }
+          return _buildLoadingSection();
+        },
+      ),
+    );
+  }
+
+  Widget _buildListPokemonColor(){
+    return Container(
+      child: FutureBuilder(
+        future: PokemonDataSource.instance.loadPokemonColor(),
+        builder: (
+            BuildContext context,
+            AsyncSnapshot<dynamic> snapshot,
+            ) {
+          if (snapshot.hasError) {
+            return _buildErrorSection();
+          }
+          if (snapshot.hasData) {
+            PokemonColorModel pokemonColorModel =
+            PokemonColorModel.fromJson(snapshot.data);
+            return _buildColorSuccessSection(pokemonColorModel);
           }
           return _buildLoadingSection();
         },
@@ -76,40 +92,58 @@ class _PageListPokemonState extends State<PageListPokemon> {
       child: CircularProgressIndicator(),
     );
   }
+  Widget _buildColorSuccessSection(PokemonColorModel data){
+    return SizedBox(
+      height: 50,
+      child: ListView.builder(
+        physics: ClampingScrollPhysics(),
+        shrinkWrap: true,
+        scrollDirection: Axis.horizontal,
+        itemCount: data.results?.length ,
+        itemBuilder: (BuildContext context, int index){
+            return InkWell(
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return PageColorListPokemon(
+                    pokemonColor: "${data.results?[index].name}", isLogin: widget.isLogin,
+                  );
+                }));
+              },
+              child: _buildViewColorPokemonList("${data.results?[index].name}"),
+            );
+        },
+      )
+    );
+  }
+
+  Widget _buildViewColorPokemonList(String name){
+    return Container(
+      width: 100,
+      child: Card(
+        color: Colors.blue,
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: 10),
+          child: Text("${name}".toUpperCase(),
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+              fontSize: 16
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
   Widget _buildSuccessSection(PokemonListModel data) {
-
-    // TextEditingController _textController = TextEditingController();
-    // onItemChanged(String value) {
-    //   setState(() {
-    //     _buildViewPokemonList(value);
-    //     InkWell(
-    //       onTap: (){
-    //         Navigator.push(context, MaterialPageRoute(builder: (context) {
-    //           return DetailPokemon(
-    //             pokemonName: value,
-    //           );
-    //         }));
-    //       },
-    //       //child: _buildItemPokemonList("${data.results?[index].name}"),
-    //       child: _buildViewPokemonList(value),
-    //     );
-    //   });
-    // }
 
     return SafeArea(
       child: Column(
         children: [
-          // Padding(padding: EdgeInsets.symmetric(vertical: 5)),
-          // Text("Pokemon",
-          //   style: TextStyle(fontSize: 30,
-          //     fontWeight: FontWeight.bold,
-          //   color: Colors.blue,letterSpacing: 10),
-          // ),
-
           Container(
-            padding: EdgeInsets.only(top: 20),
-            height: 780,
+            padding: EdgeInsets.only(top: 5),
+            height: 730,
             child: GridView.builder(
               gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
               maxCrossAxisExtent: 300,
@@ -194,20 +228,4 @@ class _PageListPokemonState extends State<PageListPokemon> {
     );
   }
 
-  Widget _buildItemPokemonList(String name) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Row(
-          children: [
-
-            Text(
-              '${name}',
-              style: TextStyle(fontSize: 20),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 }
